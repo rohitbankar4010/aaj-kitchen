@@ -228,13 +228,20 @@ export async function getRecommendations({
   mood = 'quick',
   excludeIds = [],
   customPantry = null,
-  limit = 3
+  limit = 3,
+  recentIds = []
 } = {}) {
   await new Promise(resolve => setTimeout(resolve, 60));
 
   const pantry = customPantry || getStoredPantry();
   const excludedSet = new Set(excludeIds);
-  const candidates = DISH_CATALOG.filter(dish => !excludedSet.has(dish.id));
+  const allCandidates = DISH_CATALOG.filter(dish => !excludedSet.has(dish.id));
+  // Keep the mood promise, even near the end of a browsing rotation.
+  // Showing fewer than three relevant choices beats inventing a Quick meal
+  // from a 40-minute recipe. showMoreMeals resets the rotation when empty.
+  const candidates = allCandidates.filter(dish => dish.moods.includes(mood)
+    && (mood !== 'quick' || dish.totalTimeMinutes <= 25));
+  const recentSet = new Set(recentIds);
 
   const moodLabels = {
     quick: 'Quick',
@@ -278,11 +285,13 @@ export async function getRecommendations({
         return b.availability.feasibilityPercentage - a.availability.feasibilityPercentage;
       }
       if (a.matchesMood !== b.matchesMood) return a.matchesMood ? -1 : 1;
+      if (recentSet.has(a.id) !== recentSet.has(b.id)) return recentSet.has(a.id) ? 1 : -1;
       return a.totalTimeMinutes - b.totalTimeMinutes;
     }
 
     // Eligible tier: mood match -> fully confirmed -> no missing optional -> speed
     if (a.matchesMood !== b.matchesMood) return a.matchesMood ? -1 : 1;
+    if (recentSet.has(a.id) !== recentSet.has(b.id)) return recentSet.has(a.id) ? 1 : -1;
     if (a.availability.isFullyConfirmed !== b.availability.isFullyConfirmed) {
       return a.availability.isFullyConfirmed ? -1 : 1;
     }

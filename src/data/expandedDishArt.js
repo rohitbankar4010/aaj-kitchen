@@ -62,7 +62,7 @@ export function getExpandedDishSvg(dish) {
     return `<ellipse cx="${x}" cy="${y}" rx="24" ry="15" fill="#FFF9E8" stroke="#F4DAB2" stroke-width="2"/><path d="M${x-14} ${y} Q${x} ${y-12} ${x+15} ${y}" stroke="#7DA348" stroke-width="4" fill="none"/>`;
   }).join('');
   const typeLabel = {bread:'Flatbreads',rice:'Rice bowl',dal:'Dal & stew',paneer:'Paneer curry',greens:'Fresh vegetables',chaat:'Chaat',curry:'Home-style curry'}[dishType];
-  return `<svg viewBox="0 0 400 320" class="dish-illustration-svg" role="img" aria-label="Illustrated ${typeLabel}" xmlns="http://www.w3.org/2000/svg">
+  return `<svg viewBox="0 0 400 320" class="dish-illustration-svg" role="img" aria-label="Illustrated ${typeLabel.replace(/&/g, '&amp;')}" xmlns="http://www.w3.org/2000/svg">
     <defs>
       <radialGradient id="outer-${seed}" cx="42%" cy="34%" r="75%"><stop stop-color="#F9DCA7"/><stop offset=".65" stop-color="#CE9252"/><stop offset="1" stop-color="#925A37"/></radialGradient>
       <radialGradient id="food-${seed}" cx="40%" cy="30%" r="80%"><stop stop-color="${light}"/><stop offset=".66" stop-color="${main}"/><stop offset="1" stop-color="${dark}"/></radialGradient>

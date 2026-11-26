@@ -11,7 +11,8 @@ export function renderMealPreviewCards({
   dishes,
   activeDishId,
   onSelectDish,
-  onShowMore
+  onShowMore,
+  onBrowseAll
 }) {
   const container = document.createElement('div');
   container.className = 'preview-cards-section';
@@ -78,10 +79,18 @@ export function renderMealPreviewCards({
     const more = document.createElement('button');
     more.type = 'button';
     more.className = 'preview-show-more';
-    more.textContent = '↻ Show me 3 more dinner ideas';
+    more.textContent = '↻ Show 3 different dinner ideas';
     more.setAttribute('aria-label', 'Show three different meal recommendations');
     more.addEventListener('click', () => { haptics.tap(); onShowMore(); });
     container.appendChild(more);
+  }
+  if (onBrowseAll) {
+    const browse = document.createElement('button');
+    browse.type = 'button';
+    browse.className = 'preview-browse-all';
+    browse.textContent = '⌕ Explore all 30 recipes · search by ingredient →';
+    browse.addEventListener('click', () => { haptics.tap(); onBrowseAll(); });
+    container.appendChild(browse);
   }
   return container;
 }

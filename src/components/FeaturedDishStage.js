@@ -202,13 +202,18 @@ export function renderFeaturedDishStage({
       });
     };
 
-    window.addEventListener('mousemove', (e) => {
-      handleParallax(e.clientX / window.innerWidth, e.clientY / window.innerHeight);
+    // Bind to the current stage, never window: window listeners leaked every
+    // time a different dish was selected, gradually making navigation jittery.
+    visualStage.addEventListener('pointermove', (e) => {
+      const rect = visualStage.getBoundingClientRect();
+      handleParallax((e.clientX - rect.left) / rect.width, (e.clientY - rect.top) / rect.height);
     }, { passive: true });
 
-    window.addEventListener('touchmove', (e) => {
-      if (e.touches && e.touches[0]) {
-        handleParallax(e.touches[0].clientX / window.innerWidth, e.touches[0].clientY / window.innerHeight);
+    visualStage.addEventListener('touchmove', (e) => {
+      if (e.touches?.[0]) {
+        const rect = visualStage.getBoundingClientRect();
+        handleParallax((e.touches[0].clientX - rect.left) / rect.width,
+          (e.touches[0].clientY - rect.top) / rect.height);
       }
     }, { passive: true });
   }

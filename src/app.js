@@ -15,6 +15,7 @@ import { haptics } from './components/AudioHaptics.js';
 import { openCookingJourney, getResumable } from './components/CookingJourney.js';
 import { renderFirstOpenKitchenCheck, shouldShowDailyKitchenCheck } from './components/FirstOpenKitchenCheck.js';
 import { renderShoppingHandoffModal } from './components/ShoppingHandoffModal.js';
+import { renderRecipeExplorer } from './components/RecipeExplorer.js';
 
 class AajApp {
   constructor(rootElement) {
@@ -26,7 +27,8 @@ class AajApp {
       excludedIds: [],
       pantry: getStoredPantry(),
       isMuted: false,
-      isLoading: false
+      isLoading: false,
+      recentlyShownIds: []
     };
 
     this.activeModal = null;
@@ -69,6 +71,7 @@ class AajApp {
           </div>
 
           <div class="top-nav-actions">
+            <button type="button" id="btnExploreMeals" class="aaj-explore-topbtn" aria-label="Find a meal or browse all 30 recipes">⌕ Find a meal</button>
             <!-- Kitchen Memory Entry Point -->
             <button type="button" id="btnGroceriesEntry" class="btn-groceries-entry" aria-label="Open Kitchen Memory — update what's in your pantry">
               <span aria-hidden="true">🧺</span>
@@ -109,6 +112,7 @@ class AajApp {
     `;
 
     // Attach Top Bar handlers
+    this.root.querySelector('#btnExploreMeals')?.addEventListener('click', () => this.openRecipeExplorer());
     const groceriesBtn = this.root.querySelector('#btnGroceriesEntry');
     groceriesBtn.addEventListener('click', () => {
       haptics.tap();
@@ -149,10 +153,17 @@ class AajApp {
       mood: this.state.activeMood,
       excludeIds: this.state.excludedIds,
       customPantry: this.state.pantry,
-      limit: 3
+      limit: 3,
+      recentIds: this.state.recentlyShownIds
     });
 
     this.state.recommendedDishes = res.recommendations;
+    // A small session-level memory stops mood switching from endlessly showing the same 3.
+    // It influences order only and never makes an unavailable dish appear ready.
+    this.state.recentlyShownIds = [
+      ...this.state.recentlyShownIds,
+      ...this.state.recommendedDishes.map(d => d.id)
+    ].slice(-15);
     const currentStillExists = this.state.recommendedDishes.some(d => d.id === this.state.featuredDishId);
     if (forcePromoteTop || !currentStillExists) {
       this.state.featuredDishId = this.state.recommendedDishes[0]?.id || null;
@@ -210,7 +221,8 @@ class AajApp {
       onShopMissing: (dish) => {
         this.openShoppingHandoff(dish);
       },
-      onShowMore: () => this.showMoreMeals()
+      onShowMore: () => this.showMoreMeals(),
+      onBrowseAll: () => this.openRecipeExplorer()
     });
 
     mount.appendChild(stageEl);
@@ -221,6 +233,27 @@ class AajApp {
         mount.style.transform = 'translateY(0)';
       }, 50);
     }
+  }
+
+  /** Direct search/browse experience: choose from all 30 dishes in a few taps. */
+  openRecipeExplorer() {
+    if (this.activeModal) return;
+    const explorer = renderRecipeExplorer({
+      pantry: this.state.pantry,
+      initialMood: 'all',
+      onClose: () => { if (this.activeModal === explorer) this.activeModal = null; },
+      onSelectDish: (dish) => {
+        // Keep the chosen catalogue meal featured even when it wasn't in the top 3.
+        this.state.recommendedDishes = [
+          dish,
+          ...this.state.recommendedDishes.filter(d => d.id !== dish.id).slice(0, 2)
+        ];
+        this.state.featuredDishId = dish.id;
+        this.renderFeaturedStage(true);
+      }
+    });
+    document.body.appendChild(explorer);
+    this.activeModal = explorer;
   }
 
   openDishPreview(dish) {

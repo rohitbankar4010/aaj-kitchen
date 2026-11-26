@@ -1234,3 +1234,50 @@ html, body {
 .preview-show-more:hover {background:#f0f8ee; transform:translateY(-1px)}
 .preview-show-more:focus-visible {outline:3px solid var(--color-tomato-coral); outline-offset:3px}
 @media(prefers-reduced-motion:reduce){.preview-show-more{transition:none}}
+
+/* aaj. Recipe Discovery & reliable food illustrations — 26 Nov polish */
+.dish-3d-visual-wrapper { position:relative; width:100%; height:100%; min-width:0; min-height:0; display:flex; align-items:center; justify-content:center; }
+.dish-fallback-svg { width:100%; height:100%; display:flex; align-items:center; justify-content:center; }
+.dish-fallback-svg svg, .dish-illustration-svg { width:100%; height:100%; max-width:100%; max-height:100%; display:block; object-fit:contain; overflow:visible; }
+.preview-dish-thumb-frame .dish-3d-visual-wrapper, .aaj-explorer-thumb .dish-3d-visual-wrapper { flex:1; }
+.preview-dish-thumb-frame .dish-illustration-svg { width:100%;height:100%; }
+.preview-dish-title {width:auto;height:auto;min-height:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}
+.preview-dish-card:focus-visible,.aaj-explorer-card button:focus-visible {outline:3px solid var(--color-tomato-coral);outline-offset:3px}
+
+.aaj-explorer-overlay {position:fixed;inset:0;z-index:450;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(19,35,30,.58);backdrop-filter:blur(10px);font-family:var(--font-sans)}
+.aaj-explorer-sheet {width:min(1080px,100%);max-height:min(92vh,930px);background:#fffdfa;border-radius:32px;box-shadow:0 36px 110px rgba(18,35,29,.27);display:flex;flex-direction:column;overflow:hidden;color:var(--color-text-primary)}
+.aaj-explorer-heading {display:flex;justify-content:space-between;gap:20px;padding:24px 28px 10px;flex-shrink:0}
+.aaj-explorer-eyebrow {color:#a85932;letter-spacing:.12em;font-size:.7rem;font-weight:800}
+.aaj-explorer-heading h2 {font-family:var(--font-display);font-size:clamp(1.55rem,3vw,2.25rem);line-height:1.25;margin:3px 0}
+.aaj-explorer-heading em {color:var(--color-tomato-coral)}
+.aaj-explorer-heading p {color:var(--color-text-secondary);font-size:.9rem}
+.aaj-explorer-close {background:#fff;border:1px solid #e0dbd2;border-radius:50%;height:42px;width:42px;flex-shrink:0;cursor:pointer;font-size:1.15rem}
+.aaj-explorer-controls {padding:10px 28px;display:flex;flex-direction:column;gap:12px;flex-shrink:0}
+.aaj-explorer-search-label {display:flex;align-items:center;gap:9px;background:#f9f5ee;border:1.5px solid #e8e1d4;border-radius:16px;padding:0 16px;min-height:52px;font-size:1.6rem;color:var(--color-herb-deep)}
+.aaj-explorer-search {width:100%;min-width:0;font-family:var(--font-sans);font-size:.96rem;border:0;background:transparent;outline:none;color:var(--color-text-primary)}
+.aaj-explorer-chips,.aaj-explorer-mode {display:flex;flex-wrap:wrap;gap:8px}
+.aaj-explorer-chips button,.aaj-explorer-mode button {border:1px solid #e6e3dc;background:white;color:#415650;border-radius:100px;min-height:37px;padding:7px 14px;font-family:var(--font-sans);font-weight:700;cursor:pointer;font-size:.82rem}
+.aaj-explorer-chips button.is-active,.aaj-explorer-mode button.is-active {background:#15463e;border-color:#15463e;color:white}
+.aaj-explorer-mode button {font-weight:600;font-size:.76rem;min-height:30px;padding:5px 11px}
+.aaj-explorer-count {font-size:.81rem;color:#757e75;padding:5px 28px 10px;font-weight:700;flex-shrink:0}
+.aaj-explorer-results {flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));align-content:start;gap:15px;padding:4px 28px 25px}
+.aaj-explorer-card {position:relative;background:white;border:1px solid #ece6db;border-radius:22px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 7px 18px rgba(48,52,35,.06);min-width:0}
+.aaj-explorer-thumb {height:145px;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at 40% 33%,#fffaf0,#f6ece0 85%);padding:9px 15px}
+.aaj-explorer-thumb img {width:100%;height:100%;object-fit:contain}
+.aaj-explorer-fav {position:absolute;z-index:2;right:11px;top:11px;width:34px;height:34px;border-radius:50%;border:1px solid #ddd7ce;background:rgba(255,255,255,.96);font-size:1.25rem;color:#9b817e;cursor:pointer}
+.aaj-explorer-fav.is-fav {color:#ea4d53}
+.aaj-explorer-card-content {padding:13px 15px 16px;display:flex;flex-direction:column;gap:8px;flex:1}
+.aaj-explorer-meta {color:#837a72;font-size:.73rem;font-weight:700;text-transform:capitalize}
+.aaj-explorer-card h3 {font-family:var(--font-display);font-size:1.1rem;line-height:1.3;min-height:2.65em}
+.aaj-explorer-availability {font-size:.76rem;color:#24755c;font-weight:700}
+.aaj-explorer-availability.needs-shopping {color:#b66516}
+.aaj-explorer-pick {margin-top:auto;border:0;background:#f4f8f1;color:#16483f;border-radius:12px;min-height:41px;font-family:var(--font-sans);font-weight:800;cursor:pointer}
+.aaj-explorer-pick:hover {background:#dfebdf}
+.aaj-explorer-empty {grid-column:1/-1;min-height:160px;display:flex;flex-direction:column;gap:8px;align-items:center;justify-content:center;color:#56665d;text-align:center}
+.aaj-explorer-footnote {padding:12px 28px 18px;border-top:1px solid #eee5dc;color:#8a817a;font-size:.72rem;flex-shrink:0}
+.aaj-explore-topbtn {min-height:44px;display:inline-flex;align-items:center;gap:8px;padding:8px 16px;border-radius:100px;background:#fff6e8;border:1.5px solid #e6caa2;color:#9b4d29;font:800 .88rem var(--font-sans);cursor:pointer}
+.aaj-explore-topbtn:hover {background:#ffeed7}
+.preview-browse-all {margin-top:2px;min-height:42px;border-radius:99px;border:1px solid rgba(22,66,60,.26);background:#fff4e9;color:#a04f27;font:800 .85rem var(--font-sans);cursor:pointer}
+@media(max-width:800px){.aaj-explorer-results{grid-template-columns:repeat(2,minmax(0,1fr))}.aaj-explorer-heading,.aaj-explorer-controls{padding-left:16px;padding-right:16px}.aaj-explorer-count{padding-left:16px}.aaj-explorer-results{padding-left:16px;padding-right:16px}.aaj-explorer-footnote{padding-left:16px}.aaj-explore-topbtn{font-size:.78rem;padding:7px 12px}}
+@media(max-width:520px){.aaj-explorer-overlay{padding:0}.aaj-explorer-sheet{max-height:100dvh;height:100dvh;border-radius:0}.aaj-explorer-results{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.aaj-explorer-thumb{height:107px}.aaj-explorer-card-content{padding:9px}.aaj-explorer-card h3{font-size:.94rem}.aaj-explorer-chips button{padding:5px 9px;min-height:32px;font-size:.75rem}.brand-tagline-pill{display:none}.aaj-explore-topbtn{padding:6px 10px}}
+@media(prefers-reduced-motion:reduce){.aaj-explorer-overlay{backdrop-filter:none}}
