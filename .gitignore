@@ -1,0 +1,14 @@
+# Sensitive local environment files
+.env
+.env.*
+!.env.example
+# Browser temp profiles and local captures
+.chrome_temp/
+.edge_temp/
+browser_evidence/
+browser_sandbox/
+dom.html
+# Editor / build artifacts
+node_modules/
+dist/
+.DS_Store

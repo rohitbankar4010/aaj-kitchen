@@ -1,0 +1,23 @@
+aaj. — The Complete Kitchen Companion (Clean Updated Project)
+Version: 26 November 2026
+
+The existing 3D homepage, pantry memory, cooking guide, timers, and shopping-list handoff are preserved.
+
+What's new:
+- 30 Indian dishes are active (the original ZIP had 21 extra dishes not connected to the app).
+- Recipes respond to the actual pantry selections; missing key ingredients are not marked ready.
+- Quick, Comfort, Healthy, Surprise Me lead to different suggestions.
+- A "Show me 3 more dinner ideas" button cycles to alternative recipes.
+- New recipes have distinct category-inspired SVG food artwork rather than unrelated Dum Aloo placeholders.
+
+IMPORTANT: The recommendation engine is still a local demo, NOT Gemini live AI.
+Instamart opens an external authorised destination; there is NO integrated real cart/payment.
+Only four dishes have the existing high-quality 3D image assets; newer dishes use illustrative fallbacks.
+
+FOR SOMEONE HELPING YOU WITH THE PROJECT:
+1. Extract this ZIP into its own folder (do not merge with an older copy before making a backup).
+2. Serve this extracted folder through HTTP. On Windows with Python: open Command Prompt in this folder, run "py -m http.server 5500", then open http://localhost:5500/ in Chrome. Do not double-click HTML files directly.
+3. Test the kitchen popup, different pantry selections, all 4 moods, "Show me 3 more", cooking steps, and the shopping-list handoff.
+4. To publish, upload this clean folder to GitHub and import the repository into Vercel as a static project. Root index.html is the entry point.
+
+This ZIP deliberately excludes browser profiles, history, passwords caches, and environment secrets that were present in the original ZIP. Do NOT share the original project ZIP further.
