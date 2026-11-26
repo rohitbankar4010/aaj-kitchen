@@ -1,3 +1,11 @@
+# aaj. — AI Kitchen Companion
+
+**Current product-quality release (26 November 2026)**
+
+The app includes 30 pantry-aware Indian recipes, phone/tablet cooking guides, My Masala Box, time/diet/household preferences, and a manual Instamart shopping handoff. Pantry "confirmed today" status expires when the day changes. It still uses a deterministic local recommendation engine, **not live Gemini**. See [QUALITY_RELEASE_NOTES.md](QUALITY_RELEASE_NOTES.md) and [USER_TESTING_CARD.md](USER_TESTING_CARD.md) for limitations and validation.
+
+---
+
 # aaj. — Kitchen Companion
 
 **Build status (26 November 2026):** 30 catalogued Indian meals, local pantry-aware recipe ranking, four moods, a "Show me 3 more" action, Kitchen Memory, ingredient checking, animated cooking steps, timers, and an Instamart **external shopping handoff**. The recipe engine is deterministic demo logic, **not live Gemini**. Swiggy cart/checkout is **not connected**.

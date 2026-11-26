@@ -1,0 +1,15 @@
+AAJ FINAL QUALITY UPDATE — NO ANTIGRAVITY REQUIRED
+
+This is NOT a new project. Do not delete the GitHub repository.
+1. Extract this ZIP.
+2. Open https://github.com/rohitbankar4010/aaj-kitchen
+3. Choose Add file > Upload files.
+4. Drag the extracted src folder AND the README.md, QUALITY_RELEASE_NOTES.md, USER_TESTING_CARD.md and tests folder into GitHub.
+5. Confirm the browser shows paths beginning with src/ and tests/.
+6. Commit changes; Vercel will redeploy after GitHub updates.
+7. Refresh https://aaj-kitchen.vercel.app/ after Vercel says Ready.
+8. Test the checklist in QUALITY_RELEASE_NOTES.md on a real phone.
+
+Preserves existing pantry storage; does not clear browser data.
+This release does NOT add live Gemini API or authorized Swiggy checkout.
+If GitHub reports a conflicting filename, use GitHub's file editor or GitHub Desktop to update rather than deleting the repo.
