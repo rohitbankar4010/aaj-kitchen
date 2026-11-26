@@ -1,0 +1,21 @@
+aaj. — Mobile testing update (26 November 2026)
+
+The original app is tablet-first. This update includes responsive improvements for phones:
+- Stacked header, prominent My Kitchen + Find a Meal actions, scrolling mood choices.
+- Compact 3D art after the question, before the featured recipe; readable recipe actions.
+- Swipeable alternative meals and compact recipe preview sheet.
+- Full-height Kitchen Memory, first-open Kitchen Check, and grocery shopping list.
+- Cooking instructions with a visual scene above the text and reachable Next/Previous navigation.
+
+The existing ingredient checks, local recommendation logic, 30 recipes, shopping handoff, animations and localStorage keys are unchanged.
+
+TEST ON REAL PHONES (not just desktop):
+1. Open https://aaj-kitchen.vercel.app in a private tab on Android or iPhone.
+2. On first visit, use or skip Kitchen Check.
+3. Scroll mood choices, open Find a Meal, select a recipe.
+4. Open My Kitchen; toggle one ingredient; ensure list and count update without losing scroll.
+5. Start cooking, verify the step illustration, ingredient recovery and Next/Previous.
+6. Open Get Missing Ingredients, edit/copy list and use Instamart handoff.
+7. Check portrait width at 320px, 375px and 430px, rotating to landscape if possible.
+
+Note: Instamart is a manual shopping handoff, not in-app checkout. Recipe recommendations use deterministic demo rules, not live Gemini.

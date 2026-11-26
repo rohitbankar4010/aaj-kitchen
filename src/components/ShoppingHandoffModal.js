@@ -131,6 +131,23 @@ const SHOP_CSS = `
   text-decoration: none;
 }
 .sh-btn-instamart:hover { filter: brightness(1.06); transform: translateY(-1px); }
+
+/* Edit and copy the grocery list without horizontal scrolling on a phone. */
+@media (max-width:560px) {
+  .sh-overlay { padding:0; align-items:stretch; }
+  .sh-card { width:100%; height:100dvh; max-height:100dvh; border-radius:0; border:0; animation:none; }
+  .sh-header { padding:14px 15px 12px; }
+  .sh-title { font-size:1.35rem; line-height:1.2; }
+  .sh-body { min-height:0; padding:12px 15px; overscroll-behavior:contain; }
+  .sh-item-row { min-width:0; padding:8px; }
+  .sh-item-input { width:100%; min-width:0; font-size:16px; }
+  .sh-item-remove { width:38px; height:38px; min-width:38px; }
+  .sh-add-row { min-width:0; }
+  .sh-add-input { min-width:0; width:100%; font-size:16px; }
+  .sh-add-btn { min-height:44px; }
+  .sh-footer { flex-direction:column; padding:11px 15px calc(12px + env(safe-area-inset-bottom,0px)); gap:8px; }
+  .sh-btn-copy, .sh-btn-instamart { width:100%; flex:0 0 auto; min-height:48px; }
+}
 `;
 
 export function renderShoppingHandoffModal({ dish, onClose }) {

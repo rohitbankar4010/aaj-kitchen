@@ -496,6 +496,23 @@ const CSS = `
   .pm-sheet { border-radius:24px 24px 0 0; max-height:95vh; }
   .pm-topbar,.pm-body,.pm-footer { padding-left:18px; padding-right:18px; }
 }
+
+/* Comfortable full-screen Kitchen Memory on phones — no clipped CTA or nested page scroll. */
+@media (max-width:560px) {
+  .pm-overlay { align-items:stretch; padding:0; }
+  .pm-sheet { height:100dvh; max-height:100dvh; width:100%; border:0; border-radius:0; animation:none; }
+  .pm-topbar { padding:12px 15px 10px; }
+  .pm-body { min-height:0; padding:0 15px 15px; overscroll-behavior:contain; }
+  .pm-headline { font-size:1.55rem; margin-top:13px; }
+  .pm-subline { font-size:.86rem; margin-bottom:12px; }
+  .pm-counter-strip { gap:9px; padding:10px; margin-bottom:14px; }
+  .pm-visual-grid { grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; }
+  .pm-ing-card { min-width:0; padding:10px 5px; border-radius:16px; }
+  .pm-ing-art { width:48px; height:48px; }
+  .pm-footer { padding:10px 14px calc(10px + env(safe-area-inset-bottom,0px)); }
+  .pm-footer-row { flex-direction:column; align-items:stretch; gap:7px; }
+  .pm-cta, .pm-done-btn { width:100%; min-height:48px; font-size:.9rem; }
+}
 `;
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────

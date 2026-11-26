@@ -1281,3 +1281,136 @@ html, body {
 @media(max-width:800px){.aaj-explorer-results{grid-template-columns:repeat(2,minmax(0,1fr))}.aaj-explorer-heading,.aaj-explorer-controls{padding-left:16px;padding-right:16px}.aaj-explorer-count{padding-left:16px}.aaj-explorer-results{padding-left:16px;padding-right:16px}.aaj-explorer-footnote{padding-left:16px}.aaj-explore-topbtn{font-size:.78rem;padding:7px 12px}}
 @media(max-width:520px){.aaj-explorer-overlay{padding:0}.aaj-explorer-sheet{max-height:100dvh;height:100dvh;border-radius:0}.aaj-explorer-results{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.aaj-explorer-thumb{height:107px}.aaj-explorer-card-content{padding:9px}.aaj-explorer-card h3{font-size:.94rem}.aaj-explorer-chips button{padding:5px 9px;min-height:32px;font-size:.75rem}.brand-tagline-pill{display:none}.aaj-explore-topbtn{padding:6px 10px}}
 @media(prefers-reduced-motion:reduce){.aaj-explorer-overlay{backdrop-filter:none}}
+
+
+/* ===============================================================
+   aaj. Mobile tester experience — 26 November 2026
+   Preserve iPad/desktop art direction; make phones task-first.
+   =============================================================== */
+@media (max-width: 767px) {
+  html, body { width:100%; max-width:100%; overflow-x:clip; }
+  .aaj-app-viewport { width:100%; min-width:0; padding:12px 14px 24px; }
+  .aaj-top-navbar { display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:10px; margin-bottom:10px; padding-bottom:12px; }
+  .brand-lockup { display:flex; align-items:center; flex:1 1 100%; gap:8px; min-width:0; }
+  .brand-wordmark { flex-shrink:0; font-size:2.05rem; }
+  .brand-indic-script { font-size:.82rem; white-space:nowrap; }
+  .brand-tagline-pill { display:none; }
+  .top-nav-actions { flex:1 1 100%; min-width:0; gap:8px; display:flex; flex-wrap:wrap; align-items:center; }
+  .top-nav-actions .aaj-explore-topbtn, .top-nav-actions .btn-groceries-entry { flex:1 1 120px; min-width:0; max-width:none; display:inline-flex; justify-content:center; align-items:center; padding:9px 10px; min-height:46px; font-size:.82rem; white-space:nowrap; }
+  .btn-groceries-entry { gap:5px; }
+  .grocery-entry-badge { font-size:.65rem; padding:2px 5px; }
+  .btn-sound-toggle { height:44px; width:44px; min-width:44px; }
+  .mood-selector-container { width:100%; min-width:0; margin:0 0 8px; }
+  .mood-pill-list { scroll-snap-type:x proximity; scroll-padding-inline:4px; gap:8px; padding:4px 2px 9px; }
+  .mood-pill-btn { scroll-snap-align:start; min-height:45px; padding:8px 12px; gap:7px; }
+  .mood-pill-label { font-size:.82rem; }
+  .mood-pill-sub, .mood-pill-key { font-size:.65rem; }
+  .mood-pill-icon { font-size:1rem; }
+
+  /* Split the desktop editorial column into mobile reading order: title → food art → actions → alternatives. */
+  .featured-stage-container { display:grid; grid-template-columns:minmax(0,1fr); grid-template-areas:'headline' 'art' 'details' 'alternatives'; gap:12px; min-height:0; align-items:start; width:100%; }
+  .featured-info-column { display:contents; }
+  .editorial-headline-group { grid-area:headline; gap:5px; }
+  .hero-headline { font-size:clamp(1.85rem,8vw,2.5rem); line-height:1.08; }
+  .hero-decision-badge { font-size:.68rem; padding:4px 9px; }
+  .featured-visual-stage { grid-area:art; height:205px; min-height:205px; width:100%; max-width:100%; overflow:hidden; pointer-events:none; order:initial; }
+  .featured-food-floating { pointer-events:auto; width:200px; height:200px; }
+  .sculptural-plinth-wrapper { width:240px; height:65px; bottom:3px; }
+  .sculptural-plinth-tier-2 { width:238px; height:35px; }
+  .sculptural-plinth-tier-1 { width:210px; height:34px; bottom:11px; }
+  .food-breathing-contact-shadow { width:138px; height:23px; bottom:20px; }
+  .prop-wooden-spoon { display:none; }
+  .prop-fresh-produce { width:60px; height:60px; top:4px; left:5%; }
+  .stage-ambient-apricot-glow { width:210px; height:210px; }
+  .stage-ambient-lavender-glow { width:180px; height:180px; }
+  .featured-dish-card-body { grid-area:details; width:100%; min-width:0; border-radius:24px; padding:17px 16px; gap:10px; }
+  .featured-dish-tags-row { gap:6px; }
+  .featured-dish-indic { font-size:.85rem; }
+  .featured-time-pill, .featured-avail-pill { font-size:.73rem; }
+  .featured-dish-title { font-size:clamp(1.35rem,5.8vw,1.85rem); overflow-wrap:anywhere; line-height:1.16; }
+  .featured-dish-tagline { font-size:.87rem; line-height:1.42; }
+  .featured-chef-tip-strip { display:none; } /* Chef details remain in the full cooking journey. */
+  .featured-reason-strip { margin-bottom:2px !important; font-size:.78rem !important; }
+  .featured-action-bar { display:flex; flex-direction:column; align-items:stretch; gap:8px; margin-top:1px; }
+  .btn-hero-lets-cook, .btn-hero-shop-missing, .btn-hero-subtle-swap { width:100%; justify-content:center; min-height:48px; padding:11px 14px; }
+  #alternativePreviewsMount { grid-area:alternatives; min-width:0; }
+  .preview-cards-header { align-items:center; gap:8px; }
+  .preview-header-hint { display:none; }
+  .preview-cards-list { display:flex; grid-template-columns:none; gap:10px; overflow-x:auto; scroll-snap-type:x mandatory; overscroll-behavior-inline:contain; padding:2px 2px 10px; }
+  .preview-dish-card { flex:0 0 min(76vw,290px); min-width:0; scroll-snap-align:start; padding:10px 11px; }
+  .preview-dish-thumb-frame { width:55px; height:55px; }
+  .preview-dish-title { font-size:.91rem; }
+  .preview-show-more { width:100%; }
+  .aaj-footer-bar { padding:14px 0 8px; flex-direction:column; align-items:flex-start; gap:7px; line-height:1.3; font-size:.68rem; }
+  .aaj-footer-bar > * { max-width:100%; }
+  .aaj-toast { bottom:calc(18px + env(safe-area-inset-bottom,0px)); width:calc(100% - 32px); text-align:center; font-size:.85rem; border-radius:18px; }
+
+  /* Recipe preview is a mobile sheet, not a sideways oversized desktop modal. */
+  .modal-backdrop { align-items:flex-end; }
+  .modal-card-sheet { width:100%; max-width:100%; height:min(94dvh,960px); max-height:94dvh; padding:13px 16px calc(14px + env(safe-area-inset-bottom,0px)); border-radius:24px 24px 0 0; }
+  .modal-drag-handle { margin-bottom:11px; }
+  .modal-btn-close { top:12px; right:12px; width:44px; height:44px; }
+  .modal-scroll-content { min-height:0; padding:0 2px; }
+  .modal-hero-split { grid-template-columns:minmax(0,1fr); gap:12px; margin-bottom:16px; }
+  .modal-visual-frame { height:146px; width:100%; }
+  .modal-dish-title { font-size:1.45rem; line-height:1.19; padding-right:15px; }
+  .modal-dish-tagline { font-size:.88rem; margin-bottom:9px; }
+  .modal-metrics-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; }
+  .metric-box { min-width:0; padding:7px 10px; }
+  .modal-editorial-quote { padding:10px 12px; margin-bottom:12px; }
+  .modal-section { margin-bottom:14px; }
+  .modal-sticky-action-bar { padding-top:10px; margin-top:8px; }
+  .btn-primary-launch-cook { min-height:51px; padding:12px 15px; font-size:1rem; }
+
+  .correction-backdrop { padding:12px; }
+  .correction-card { width:100%; max-width:100%; padding:20px 16px; }
+
+  /* Full recipe explorer: cards remain browseable but keep all controls visible. */
+  .aaj-explorer-overlay { padding:0; }
+  .aaj-explorer-sheet { width:100%; max-height:100dvh; height:100dvh; border-radius:0; }
+  .aaj-explorer-heading { padding:16px 14px 8px; }
+  .aaj-explorer-controls { padding:7px 14px; }
+  .aaj-explorer-results { padding:6px 14px 20px; gap:10px; }
+  .aaj-explorer-card-content { min-width:0; }
+  .aaj-explorer-card h3 { overflow-wrap:anywhere; }
+  .aaj-explorer-footnote { padding:9px 14px calc(10px + env(safe-area-inset-bottom,0px)); }
+
+  :is(button,a,input,select,textarea):focus-visible { outline:3px solid var(--color-tomato-coral); outline-offset:2px; }
+  input,textarea,select { font-size:16px; } /* Prevent automatic iPhone keyboard zoom. */
+}
+@media (max-width: 375px) {
+  .aaj-app-viewport { padding-left:11px; padding-right:11px; }
+  .brand-indic-script { font-size:.73rem; }
+  .top-nav-actions { gap:6px; }
+  .top-nav-actions .aaj-explore-topbtn, .top-nav-actions .btn-groceries-entry { font-size:.75rem; padding:8px 7px; }
+  .featured-food-floating { width:180px; height:180px; }
+  .featured-visual-stage { height:188px; min-height:188px; }
+  .hero-headline { font-size:1.83rem; }
+  .featured-dish-card-body { padding:15px 13px; }
+}
+
+/* Hide idle toast completely on small screens instead of leaving a blank pill. */
+@media (max-width:767px) {
+  .aaj-toast:not(.is-visible) { visibility:hidden; pointer-events:none; }
+}
+
+/* Avoid collapsed recipe-card rows inside a scrolling flex/grid panel. */
+.aaj-explorer-results { grid-auto-rows:minmax(270px,auto); }
+.aaj-explorer-card { min-height:270px; height:100%; align-self:stretch; }
+@media (max-width:520px) {
+  .aaj-explorer-results { grid-auto-rows:minmax(250px,auto); }
+  .aaj-explorer-card { min-height:250px; }
+}
+
+/* Phone recipe discovery: readable rows beat miniature two-column cards. */
+@media (max-width:520px) {
+  .aaj-explorer-results { grid-template-columns:minmax(0,1fr); grid-auto-rows:auto; gap:10px; }
+  .aaj-explorer-card { display:grid; grid-template-columns:112px minmax(0,1fr); min-height:166px; height:auto; }
+  .aaj-explorer-thumb { height:100%; min-height:150px; padding:8px; }
+  .aaj-explorer-card-content { padding:11px 42px 10px 11px; gap:5px; }
+  .aaj-explorer-card h3 { min-height:0; font-size:.99rem; line-height:1.26; }
+  .aaj-explorer-meta { font-size:.65rem; line-height:1.3; }
+  .aaj-explorer-availability { font-size:.72rem; }
+  .aaj-explorer-pick { min-height:38px; font-size:.78rem; padding:4px 8px; }
+  .aaj-explorer-fav { width:34px; height:34px; top:9px; right:9px; }
+}

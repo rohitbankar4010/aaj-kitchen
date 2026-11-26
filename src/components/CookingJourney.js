@@ -24,6 +24,8 @@ import { DISH_CATALOG } from '../data/dishCatalog.js';
 import { getStoredPantry } from '../data/pantryStaples.js';
 import { loadSession, saveSession, clearSession, logCookingEvent } from '../data/cookingSession.js';
 import { haptics } from './AudioHaptics.js';
+import { getGroundedIngredientDetail } from '../adapter/recommendationEngineAdapter.js';
+import { renderShoppingHandoffModal } from './ShoppingHandoffModal.js';
 import {
   SCENE_CSS,
   renderStepScene,
@@ -31,6 +33,26 @@ import {
 } from './CookingScenes.js';
 
 const fmt = (s) => `${Math.floor(s / 60)}:${String(Math.max(0, s) % 60).padStart(2, '0')}`;
+
+// Conservative, explicitly user-confirmed suggestions. No automatic or invented stock.
+// Suggestions that would substantially change a dish are intentionally omitted.
+export const COOKING_SUBSTITUTES = Object.freeze({
+  onions: { name: 'finely chopped shallots', note: 'Use a similar amount; the flavour will be a little milder.' },
+  tomatoes: { name: 'canned chopped tomatoes', note: 'Use a similar volume and reduce the sauce until thick.' },
+  ginger_garlic: { name: 'freshly minced ginger and garlic', note: 'Use fresh ginger and garlic instead of prepared paste.' },
+  green_chilli: { name: 'a small pinch of red chilli powder', note: 'Add a little at a time; the heat may differ.' },
+  peas: { name: 'finely chopped green beans', note: 'Cook until tender; timing may vary.' },
+  paneer: { name: 'firm tofu', note: 'Crumble or cube it; the taste and texture will be different.' },
+  basmati_rice: { name: 'another variety of white rice', note: 'Follow that rice variety’s water and cooking directions.' },
+  atta: { name: 'another plain whole-wheat atta', note: 'Add water gradually; dough consistency can vary.' },
+  dahi: { name: 'plain unsweetened yogurt', note: 'Use unflavoured yogurt; check consistency before mixing.' },
+  ghee: { name: 'neutral cooking oil', note: 'Use a little oil instead; the aroma will differ.' },
+  mustard_oil: { name: 'neutral cooking oil', note: 'Use the oil suited to the cooking temperature.' },
+  cumin: { name: 'ground cumin', note: 'Use less than whole seeds and add later to avoid scorching.' }
+});
+
+const safeText = (value) => String(value).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+
 
 /**
  * Builds rich, structured steps from the dish's detailedSteps,
@@ -533,6 +555,27 @@ ${SCENE_CSS}
   clip: rect(0 0 0 0);
 }
 
+
+/* Honest missing-essential recovery inside the cooking journey */
+.cook-recovery { display:flex; flex-direction:column; gap:12px; margin-top:4px; }
+.cook-recovery-title { color:#793d18; font-weight:800; margin:0; font-size:1rem; }
+.cook-recovery-list { display:grid; gap:10px; }
+.cook-recovery-row { background:#fff9ed; border:1px solid #efd3aa; border-radius:16px; padding:12px 14px; display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:12px; }
+.cook-recovery-info { flex:1 1 200px; min-width:0; }
+.cook-recovery-info strong { display:block; font-size:.98rem; color:#5b3722; }
+.cook-recovery-info span { display:block; color:#77675b; font-size:.84rem; margin-top:3px; }
+.cook-recovery-actions { display:flex; flex-wrap:wrap; align-items:center; gap:9px; }
+.cook-sub-btn { background:#fff; border:1.5px solid #d8bfa7; border-radius:22px; padding:9px 14px; color:#173f37; cursor:pointer; font:700 .88rem var(--font-sans); }
+.cook-sub-btn:hover { border-color:#176c56; background:#f1fbf5; }
+.cook-sub-note { background:#e9f4ef; color:#13483e; padding:10px 14px; border-radius:12px; line-height:1.5; font-size:.9rem; }
+.cook-recovery-footer { display:flex; flex-wrap:wrap; gap:12px; align-items:center; }
+.cook-recovery-footer > button { flex:1 1 180px; }
+.cook-shop-btn { background:#fff5e6; border-color:#ea9230; color:#89420b; }
+.cook-shop-btn:hover { background:#ffe9cc; }
+.cook-sub-banner { background:#e9f4ef; border:1px solid #b2d8c9; color:#164c41; padding:12px 16px; border-radius:15px; font-size:.92rem; line-height:1.45; }
+.cook-missing-help { font-size:.88rem; color:#795c49; line-height:1.4; }
+@media(max-width:600px){.cook-recovery-row{align-items:stretch}.cook-recovery-footer{flex-direction:column}.cook-recovery-footer > button{width:100%}}
+
 /* Synchronized Keyframe Transitions */
 @keyframes cookOverlayIn {
   from { opacity: 0; transform: scale(0.98); }
@@ -588,6 +631,49 @@ ${SCENE_CSS}
     transition: none !important;
   }
 }
+
+
+/* Pocket cooking mode: visual instruction followed by short text and a reachable Next button. */
+@media (max-width: 700px) {
+  .cook-overlay { overscroll-behavior-y:contain; }
+  .cook-sheet { width:100%; min-width:0; min-height:100dvh; padding:calc(12px + env(safe-area-inset-top,0px)) 14px calc(14px + env(safe-area-inset-bottom,0px)); gap:12px; }
+  .cook-top { gap:10px; align-items:center; padding-bottom:9px; }
+  .cook-top-title-lockup { display:block; min-width:0; }
+  .cook-top h2 { white-space:normal; overflow:visible; text-overflow:clip; font-size:1.05rem; line-height:1.25; }
+  .cook-top-kicker { display:none; }
+  .cook-top .cook-btn { padding:0 12px; flex-shrink:0; min-height:42px; font-size:.76rem; }
+  .cook-progress { height:8px; }
+  .cook-body { display:flex; flex-direction:column; align-items:stretch; gap:12px; flex:0 0 auto; }
+  .cook-visual-stage-wrapper { order:-1; gap:7px; width:100%; align-self:center; }
+  .scene-3d-stage { width:min(100%,300px); max-width:300px; aspect-ratio:1.6; padding:10px; border-radius:22px; overflow:hidden; }
+  .scene-svg-wrapper { max-width:230px; width:100%; height:150px; filter:drop-shadow(0 8px 9px rgba(45,26,18,.1)); }
+  .scene-status-pill { margin-top:3px; padding:5px 10px; font-size:.7rem; text-align:center; }
+  .cook-up-next-banner { display:none; }
+  .cook-card { width:100%; padding:18px 16px; gap:11px; border-radius:22px; }
+  .cook-step-meta-row { gap:6px; }
+  .cook-step-badge, .cook-cue-pill { font-size:.72rem; padding:4px 9px; }
+  .cook-step-title { font-size:clamp(1.34rem,5.8vw,1.65rem); line-height:1.2; }
+  .cook-instruction-text { font-size:.98rem; line-height:1.48; padding:10px 12px; }
+  .cook-action-chip { font-size:.9rem; line-height:1.36; }
+  .cook-chef-tip-strip { padding:10px 12px; font-size:.83rem; }
+  .cook-timer { padding:9px 13px; gap:8px; }
+  .cook-timer-time { font-size:1.8rem; }
+  .cook-chips { grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; }
+  .cook-chip { min-width:0; min-height:50px; padding:10px; gap:7px; font-size:.83rem; overflow-wrap:anywhere; }
+  .cook-note, .cook-warn { font-size:.87rem; }
+  .cook-recovery-row { padding:10px; }
+  .cook-recovery-actions { width:100%; }
+  .cook-sub-btn { min-height:42px; }
+  .cook-nav { position:sticky; bottom:0; z-index:4; display:flex; align-items:stretch; gap:8px; margin:0 -14px calc(-14px - env(safe-area-inset-bottom,0px)); padding:10px 14px calc(10px + env(safe-area-inset-bottom,0px)); border-top:1px solid var(--color-border-subtle); background:rgba(250,245,235,.96); backdrop-filter:blur(9px); }
+  .cook-nav .cook-btn { flex:1 1 0; min-width:0; min-height:48px; padding:8px 10px; font-size:.86rem; line-height:1.2; white-space:normal; }
+  .cook-nav .cook-btn.is-primary { flex:1.6 1 0; padding:8px 10px; font-size:.92rem; }
+  .cook-keyboard-hint { display:none; }
+}
+@media (max-width: 360px) {
+  .cook-chips { grid-template-columns:1fr; }
+  .scene-3d-stage { max-width:270px; }
+  .cook-step-title { font-size:1.3rem; }
+}
 `;
 
 export function openCookingJourney({ dish, resume = false, onExit = () => {}, onComplete = () => {} }) {
@@ -602,6 +688,8 @@ export function openCookingJourney({ dish, resume = false, onExit = () => {}, on
   const uncertain = uncertainEssentials(dish);
   const have = Object.fromEntries(uncertain.map((p) => [p.id, p.inStock]));
   let session = resume ? loadSession() : null;
+  const substitutions = session?.substitutions ? { ...session.substitutions } : {};
+  const missingNow = () => uncertain.filter(p => !have[p.id] && !substitutions[p.id]);
   let phase = session ? 'cook' : uncertain.length ? 'confirm' : 'ready';
   if (!steps.length) phase = 'empty';
 
@@ -669,7 +757,9 @@ export function openCookingJourney({ dish, resume = false, onExit = () => {}, on
         </div>
       `;
     } else if (phase === 'confirm') {
-      const lacking = uncertain.filter((p) => !have[p.id]).length;
+      const missing = missingNow();
+      const lacking = missing.length;
+      const substituted = Object.entries(substitutions).filter(([id]) => !have[id]);
       sheet.innerHTML = `
         ${top()}
         <div class="cook-body">
@@ -692,17 +782,39 @@ export function openCookingJourney({ dish, resume = false, onExit = () => {}, on
                 )
                 .join('')}
             </div>
-            ${
-              lacking
-                ? `<p class="cook-warn">⚠️ ${lacking} essential item${lacking > 1 ? 's' : ''} missing. You can still cook anyway or substitute.</p>`
-                : ''
-            }
-            <div class="cook-nav">
+            ${substituted.length ? `
+              <div class="cook-sub-note" aria-live="polite">
+                ✓ Using ${substituted.map(([id, option]) => `<strong>${safeText(option.name)}</strong> instead of ${safeText(uncertain.find(p => p.id === id)?.name || id)} <button type="button" class="cook-sub-btn" data-act="undo-substitute" data-id="${safeText(id)}">Undo</button>`).join('<br>')}
+                <div class="cook-missing-help">The original recipe text may still name the original ingredient. Apply the substitution notes while cooking.</div>
+              </div>
+            ` : ''}
+            ${lacking ? `
+              <section class="cook-recovery" aria-label="Resolve missing ingredients">
+                <p class="cook-recovery-title" role="status">⚠️ Missing ${lacking} essential ingredient${lacking === 1 ? '' : 's'}. Let's sort that out before cooking.</p>
+                <div class="cook-recovery-list">
+                  ${missing.map(p => {
+                    const suggestion = COOKING_SUBSTITUTES[p.id];
+                    return `<div class="cook-recovery-row">
+                      <div class="cook-recovery-info"><strong>${safeText(p.name)}</strong>
+                        <span>${suggestion ? `Possible alternative: ${safeText(suggestion.name)}. ${safeText(suggestion.note)}` : 'No reliable substitution available for this recipe.'}</span>
+                      </div>
+                      <div class="cook-recovery-actions">
+                        ${suggestion ? `<button type="button" class="cook-sub-btn" data-act="use-substitute" data-id="${safeText(p.id)}" aria-label="I have ${safeText(suggestion.name)}; use it instead of ${safeText(p.name)}">✓ I have ${safeText(suggestion.name)}</button>` : ''}
+                      </div>
+                    </div>`;
+                  }).join('')}
+                </div>
+                <div class="cook-recovery-footer">
+                  <button type="button" class="cook-btn cook-shop-btn" data-act="shop-missing">🛒 Get missing ingredients</button>
+                  <button type="button" class="cook-btn" data-act="exit">↩ Choose another meal</button>
+                </div>
+                <div class="cook-missing-help">Shopping won't mark items as available. After purchasing, tap their ingredient tiles to confirm you have them. Suggested substitutions are optional and must be available in your kitchen.</div>
+              </section>
+            ` : `<p class="cook-sub-note" role="status">✓ Everything needed is accounted for. Ready to start!</p>`}
+            ${!lacking ? `<div class="cook-nav">
               <button type="button" class="cook-btn" data-act="exit">← Return to Meals</button>
-              <button type="button" class="cook-btn is-primary" data-act="start">
-                ${lacking ? 'Cook anyway' : 'Start cooking'} →
-              </button>
-            </div>
+              <button type="button" class="cook-btn is-primary" data-act="start">Start cooking →</button>
+            </div>` : ''}
           </div>
           <div class="cook-visual-stage-wrapper">
             ${renderStepScene('knead_roll', dish)}
@@ -788,6 +900,7 @@ export function openCookingJourney({ dish, resume = false, onExit = () => {}, on
               <span class="cook-cue-pill">🍳 ${step.utensil}</span>
             </div>
 
+            ${Object.keys(session.substitutions || {}).length ? `<div class="cook-sub-banner" role="note">Ingredient swaps for this meal: ${Object.entries(session.substitutions).map(([id, option]) => `<strong>${safeText(option.name)}</strong> instead of ${safeText(uncertain.find(p => p.id === id)?.name || id)} (${safeText(option.note)})`).join('; ')}. Apply these adjustments when the instructions mention the original ingredient.</div>` : ''}
             <!-- Punchy Short Step Title -->
             <h3 class="cook-step-title" tabindex="-1">${step.title}</h3>
 
@@ -903,13 +1016,15 @@ export function openCookingJourney({ dish, resume = false, onExit = () => {}, on
   }
 
   function start() {
+    if (missingNow().length) { phase = 'confirm'; draw(); return; }
     session = {
       sessionId: `cook-${Date.now()}`,
       dishId: dish.id,
       stepIndex: 0,
       timers: {},
       startedAt: new Date().toISOString(),
-      missingEssentials: uncertain.filter((p) => !have[p.id]).map((p) => p.id)
+      substitutions: { ...substitutions },
+      missingEssentials: missingNow().map((p) => p.id)
     };
     logCookingEvent('cooking_started', session, dish);
     save();
@@ -978,7 +1093,31 @@ export function openCookingJourney({ dish, resume = false, onExit = () => {}, on
     } else if (a === 'toggle') {
       haptics.tap();
       have[b.dataset.id] = !have[b.dataset.id];
+      if (have[b.dataset.id]) delete substitutions[b.dataset.id];
       draw(`[data-id="${b.dataset.id}"]`);
+    } else if (a === 'use-substitute') {
+      const id = b.dataset.id;
+      if (!have[id] && COOKING_SUBSTITUTES[id]) {
+        substitutions[id] = { ...COOKING_SUBSTITUTES[id] };
+        live.textContent = `Using ${substitutions[id].name} instead of ${id.replace(/_/g, ' ')}.`;
+        draw();
+      }
+    } else if (a === 'undo-substitute') {
+      delete substitutions[b.dataset.id];
+      draw();
+    } else if (a === 'shop-missing') {
+      const missing = missingNow();
+      if (!missing.length) return;
+      const pantryById = Object.fromEntries(getStoredPantry().map(item => [item.id, item]));
+      const shoppingDish = {
+        ...dish,
+        availability: {
+          ...dish.availability,
+          missingDetails: missing.map(p => getGroundedIngredientDetail(dish, p.id, pantryById))
+        }
+      };
+      const modal = renderShoppingHandoffModal({ dish: shoppingDish, onClose: () => {} });
+      document.body.appendChild(modal);
     } else if (a === 'check-ing') {
       haptics.pop();
       const key = b.dataset.key;
@@ -1016,6 +1155,8 @@ export function openCookingJourney({ dish, resume = false, onExit = () => {}, on
   });
 
   function onKey(e) {
+    // The shopping modal has its own keyboard handling. Do not close the underlying cooking journey.
+    if (document.querySelector('.sh-overlay')) return;
     if (e.key === 'Escape') {
       e.preventDefault();
       e.stopPropagation();

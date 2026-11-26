@@ -165,6 +165,25 @@ const CHECK_CSS = `
   color: var(--color-text-secondary); font: 600 .9rem var(--font-sans); cursor: pointer;
 }
 .fkc-btn-skip:hover { border-color: rgba(45,26,18,.3); color: var(--color-text-primary); }
+
+/* Daily welcome/check is phone-first, skippable and scrollable. */
+@media (max-width:560px) {
+  .fkc-overlay { align-items:stretch; padding:0; }
+  .fkc-card { width:100%; height:100dvh; max-height:100dvh; border-radius:0; border:0; animation:none; }
+  .fkc-header { padding:12px 14px 10px; gap:10px; }
+  .fkc-title { font-size:1.55rem; }
+  .fkc-sub { font-size:.84rem; }
+  .fkc-body { min-height:0; padding:12px 14px; overscroll-behavior:contain; }
+  .fkc-legend-bar { gap:7px; }
+  .fkc-grid { grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; }
+  .fkc-tile { min-width:0; padding:10px 5px; border-radius:16px; }
+  .fkc-tile-art { width:45px; height:45px; }
+  .fkc-tile-name { font-size:.73rem; overflow-wrap:anywhere; }
+  .fkc-tile-hindi { font-size:.65rem; }
+  .fkc-footer { padding:9px 14px calc(10px + env(safe-area-inset-bottom,0px)); flex-wrap:wrap; gap:8px; }
+  .fkc-btn-primary { flex:1 1 100%; min-height:48px; }
+  .fkc-btn-skip { flex:1 1 100%; min-height:42px; }
+}
 `;
 
 export function renderFirstOpenKitchenCheck({ onComplete, onSkip }) {
