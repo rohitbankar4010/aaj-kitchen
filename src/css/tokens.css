@@ -1,0 +1,97 @@
+/**
+ * aaj. Design System Tokens (3D Sculptural Art Direction)
+ * Palette: Buttery cream, Peach, Apricot, Lavender accents, Tomato coral, Deep herb green
+ * Lighting: Cinematic pastel lighting, layered depth, soft contact shadows
+ */
+
+:root {
+  /* Warm Buttery Creams */
+  --color-cream-bg: #FAF5EB;
+  --color-cream-surface: #FFFDF9;
+  --color-cream-card: #FFFFFF;
+  --color-cream-muted: #F2E9D8;
+  --color-butter-yellow: #F6D860;
+  --color-butter-warm: #ECC94B;
+
+  /* Peach & Apricot */
+  --color-peach-light: #FFEDE0;
+  --color-peach-base: #F8B182;
+  --color-peach-deep: #F4A261;
+  --color-apricot: #FF9E64;
+  --color-apricot-glow: rgba(255, 158, 100, 0.25);
+
+  /* Lavender Accents & Rim Lighting */
+  --color-lavender-subtle: #F3EDFD;
+  --color-lavender-light: #E8DEF8;
+  --color-lavender-accent: #B39DDB;
+  --color-lavender-deep: #7E57C2;
+  --color-lavender-glow: rgba(179, 157, 219, 0.35);
+
+  /* Tomato Coral */
+  --color-tomato-coral: #FF5A5F;
+  --color-tomato-deep: #D9383A;
+  --color-tomato-dark: #B91C1C;
+  --color-tomato-light: #FFE8E8;
+  --color-coral-glow: rgba(255, 90, 95, 0.35);
+
+  /* Deep Herb Green */
+  --color-herb-deep: #16423C;
+  --color-herb-medium: #2A5C43;
+  --color-herb-leaf: #387456;
+  --color-herb-light: #E6F0EB;
+  --color-herb-glow: rgba(22, 66, 60, 0.2);
+
+  /* Text & Surfaces */
+  --color-text-primary: #1C1917;
+  --color-text-secondary: #57534E;
+  --color-text-tertiary: #8C827A;
+  --color-text-inverse: #FFFFFF;
+
+  --color-border-subtle: rgba(28, 25, 23, 0.08);
+  --color-border-medium: rgba(28, 25, 23, 0.15);
+  --color-border-warm: rgba(248, 177, 130, 0.45);
+  --color-border-lavender: rgba(179, 157, 219, 0.3);
+
+  /* Typography */
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-indic: 'Rozha One', 'Noto Serif Devanagari', serif;
+
+  /* 3D Dimensional Shadows & Ambient Occlusion */
+  --shadow-plinth: 
+    0 32px 64px -12px rgba(45, 26, 18, 0.18),
+    0 16px 32px -8px rgba(126, 87, 194, 0.12),
+    0 4px 12px rgba(0, 0, 0, 0.04);
+  --shadow-food-contact: 
+    0 24px 40px -10px rgba(60, 30, 15, 0.32),
+    0 8px 16px -4px rgba(45, 26, 18, 0.2);
+  --shadow-utensil: 
+    -12px 24px 48px -6px rgba(40, 20, 10, 0.28),
+    0 8px 16px rgba(0, 0, 0, 0.1);
+  --shadow-card-soft: 
+    0 14px 34px -4px rgba(45, 30, 20, 0.08),
+    0 4px 12px rgba(0, 0, 0, 0.03);
+  --shadow-active-btn: 
+    0 12px 28px -4px rgba(255, 90, 95, 0.45),
+    0 4px 10px rgba(255, 90, 95, 0.25);
+
+  /* Radii */
+  --radius-xs: 8px;
+  --radius-sm: 14px;
+  --radius-md: 22px;
+  --radius-lg: 32px;
+  --radius-xl: 44px;
+  --radius-pill: 9999px;
+
+  /* Spring Physics & Motion */
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-spring-snappy: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-fast: 180ms;
+  --duration-normal: 340ms;
+  --duration-slow: 600ms;
+
+  /* iPad Touch Targets */
+  --tap-target-min: 50px;
+  --tap-target-lg: 60px;
+}
